@@ -7,6 +7,8 @@ import bg from "../../assets/img/Signbg.png"
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Loader from '../../components/Loader';
+import Loading from '../../components/Loading';
 
 
 const schema = z.object({
@@ -21,13 +23,14 @@ function Login() {
         resolver: zodResolver(schema),
     });
     const [serverError, setServerError] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false); // Track loading state
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         // e.preventDefault();
         // console.log(data)
+        setIsLoading(true); // Start loading
         try {
             const res = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/login`,
@@ -45,6 +48,8 @@ function Login() {
             } else {
                 setServerError("An unexpected error occurred. Please try again."); // Fallback error
             }
+        } finally {
+            setIsLoading(false); // End loading
         }
     }
 
@@ -57,9 +62,9 @@ function Login() {
 
             }}
         >
+            {isLoading && <Loading />}
 
-
-            <div className='max-w-screen-2xl mx-auto px-4 sm:px-10 py-5 sm:py-10 h-svh flex justify-center items-center backdrop-blur-md'
+            <div className=' mx-auto px-4 sm:px-10 py-5 sm:py-10 h-svh flex justify-center items-center backdrop-blur-md'
             >
                 <div className="rounded-[60px] relative w-full max-w-lg bg-white  px-6 py-10 md:py-20 md:px-10">
                     <div className="w-full space-y-16">

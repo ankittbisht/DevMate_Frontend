@@ -41,8 +41,8 @@ function Layout() {
     return (
         <>
             <Header />
-        
-            <Outlet />
+            <section className='bg-black'><Outlet /></section>
+
             <Footer />
         </>
     )

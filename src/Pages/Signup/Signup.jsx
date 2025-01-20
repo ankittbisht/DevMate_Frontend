@@ -7,6 +7,7 @@ import bg from "../../assets/img/Signbg.png"
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Loading from '../../components/Loading';
 
 function Signup() {
 
@@ -32,12 +33,12 @@ function Signup() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    const [isLoading, setIsLoading] = useState(false); // Track loading state
     const [errorMessage, setErrorMessage] = useState("");
 
     const onSubmit = async (data) => {
+        setIsLoading(true); // Start loading
         try {
-
             const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/signup`, data, {
                 withCredentials: true
             });
@@ -51,6 +52,7 @@ function Signup() {
 
             console.error(err);
         } finally {
+            setIsLoading(false); // End loading
             reset();
         }
     }
@@ -64,9 +66,8 @@ function Signup() {
 
             }}
         >
-
-
-            <div className='max-w-screen-2xl mx-auto px-4 sm:px-10 py-5 sm:py-10 h-svh backdrop-blur-md flex justify-center items-center '
+            {isLoading && <Loading />}
+            <div className=' mx-auto px-4 sm:px-10 py-5 sm:py-10 h-svh backdrop-blur-md flex justify-center items-center '
             >
                 <div className="rounded-[60px] relative w-full max-w-lg bg-white  px-6 py-10 md:py-10 md:px-10">
                     <div className="w-full space-y-12">
