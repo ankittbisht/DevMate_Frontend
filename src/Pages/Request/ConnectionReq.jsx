@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addReviewRequest, removeReviewRequest } from '../../Utils/reviewRequestSlice';
 import maleSvg from "../../assets/svg/male.svg"
@@ -9,15 +9,18 @@ import githubSvg from "../../assets/svg/github.svg"
 import acceptSvg from "../../assets/svg/accept.svg"
 import rejectSvg from "../../assets/svg/reject.svg"
 import EmptyState from '../../components/EmptyState';
+import Loaderforcard from '../../components/Loaderforcard';
 
 
 function ConnectionReq() {
     // const pendingRequest = Array.from({ length: 5 }, (_, idx) => idx);
+    const [loader, setLoader] = useState(false)
 
     const pendingRequest = useSelector((store) => store.reviewRequest);
     const dispatch = useDispatch();
 
     const searchRequest = async () => {
+
         try {
             const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user/request/received`, {
                 withCredentials: true
@@ -32,11 +35,14 @@ function ConnectionReq() {
     }
 
     const reviewRequest = async (status, _id) => {
+        setLoader(true)
         try {
             const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/request/review/` + status + "/" + _id, {}, { withCredentials: true })
             dispatch(removeReviewRequest(_id))
         } catch {
             console.error(err)
+        } finally {
+            setLoader(false)
         }
     }
 
@@ -54,7 +60,8 @@ function ConnectionReq() {
                 </h1>
                 <div className='flex flex-col gap-10 items-center'>
                     {pendingRequest.map((item, idex) => (
-                        <div className='bg-[#141414] p-6 rounded-[60px] border-[4px] border-white border-opacity-20 max-w-4xl  flex flex-col  md:flex-row gap-11'>
+                        <div className='bg-[#141414] p-6 rounded-[60px] border-[4px] border-white border-opacity-20 max-w-4xl  flex flex-col  md:flex-row gap-11 relative'>
+                            {/* {loader && <Loaderforcard />} */}
                             <div className=' imageBox rounded-[40px] border-2 border-white border-opacity-20 flex  flex-col justify-center relative bg-black pt-10 md:px-10 lg:px-20 items-center '>
                                 <div className='rounded-full size-56 flex justify-center items-center overflow-hidden'>
                                     <img src={johnImg} className='object-cover size-56' alt="" />

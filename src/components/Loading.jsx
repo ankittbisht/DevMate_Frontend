@@ -2,7 +2,7 @@ import React from 'react'
 import "./loader.css"
 function Loading() {
     return (
-        <main className=' backdrop-blur-sm h-full w-full absolute flex justify-center items-center inset-0 z-[999]'>
+        <main className=' backdrop-blur-sm h-full w-full fixed flex justify-center items-center inset-0 z-[999]'>
             <div className="loader ">
                 <div className="bar1"></div>
                 <div className="bar2"></div>

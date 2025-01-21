@@ -11,10 +11,12 @@ import connectionSvg from "../../assets/svg/connected.svg"
 import manSvg from "../../assets/svg/Man.svg"
 import dropwown from "../../assets/svg/dropdown.svg"
 import logoutSvg from "../../assets/svg/logout.svg"
+import Loading from '../../components/Loading';
 
 
 function Header() {
     const [menu, setMenu] = useState(false)
+    const [loading, setIsLoading] = useState(false)
     const user = useSelector((store) => store.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -23,6 +25,7 @@ function Header() {
         setMenu(!menu);
     }
     const handleLogout = async () => {
+        setIsLoading(true)
         try {
             await axios.post(`${import.meta.env.VITE_API_BASE_URL}/logout`, {}, { withCredentials: true });
             dispatch(removeUser());
@@ -30,6 +33,8 @@ function Header() {
 
         } catch (err) {
             console.error(err);
+        } finally {
+            setIsLoading(false)
         }
 
         // dispatch(addUser(null));
@@ -62,6 +67,7 @@ function Header() {
     ]
     return (
         <section className='bg-black'>
+            {loading && <Loading />}
             <nav className='max-w-screen-2xl mx-auto px-4 sm:px-10 py-5 sm:py-10 flex  justify-between items-center'>
                 <Link to="/">
                     <h3 className="leading-none text-2xl md:text-4xl  font-borel  whitespace-nowrap text-white ">DevMate</h3>
