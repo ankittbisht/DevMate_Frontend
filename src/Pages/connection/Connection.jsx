@@ -8,6 +8,7 @@ import johnImg from "../../assets/img/john.png"
 import linkedin from "../../assets/svg/linkedin.svg"
 import githubSvg from "../../assets/svg/github.svg"
 import EmptyState from '../../components/EmptyState'
+import crossIcon from "../../assets/svg/cross.svg"
 
 function Connection() {
     const arr = Array.from({ length: 5 }, (_, idx) => idx);
@@ -53,6 +54,9 @@ function Connection() {
                                             </h2>
 
                                         </div>
+                                        <div className='absolute top-6 left-6'>
+                                            <img src={crossIcon} alt="" />
+                                        </div>
                                         <div className='absolute top-6 right-6'>
                                             <img src={maleSvg} alt="" />
                                         </div>
@@ -75,14 +79,11 @@ function Connection() {
                                         </p>
                                     </div>
                                 </div>
-
                             ))}
-
                         </div>
                     </>
                 )
             }
-
         </div>
     )
 }

@@ -12,6 +12,7 @@ import manSvg from "../../assets/svg/Man.svg"
 import dropwown from "../../assets/svg/dropdown.svg"
 import logoutSvg from "../../assets/svg/logout.svg"
 import Loading from '../../components/Loading';
+import { addFeed } from '../../Utils/feedSlice';
 
 
 function Header() {
@@ -29,6 +30,7 @@ function Header() {
         try {
             await axios.post(`${import.meta.env.VITE_API_BASE_URL}/logout`, {}, { withCredentials: true });
             dispatch(removeUser());
+            dispatch(addFeed(null))
             return navigate("/login")
 
         } catch (err) {
@@ -37,7 +39,7 @@ function Header() {
             setIsLoading(false)
         }
 
-        // dispatch(addUser(null));
+        dispatch(addUser(null));
     }
     const navLinks = [
         {
@@ -65,6 +67,30 @@ function Header() {
             icon: connectionSvg
         },
     ]
+    const handleProfileClick = () => {
+        navigate("/")
+
+    };
+
+    const handleConnectionClick = () => {
+        navigate("/connection")
+
+    };
+
+    const handleRequestClick = () => {
+        navigate("/request")
+
+    };
+    const menuItems = [
+        { id: 4, label: "Logout", icon: logoutSvg, action: handleLogout },
+        { id: 1, label: "Profile", icon: profileSvg, action: handleProfileClick },
+        { id: 2, label: "Connection", icon: connectionSvg, action: handleConnectionClick },
+        { id: 3, label: "Request", icon: requestSvg, action: handleRequestClick },
+
+    ];
+
+
+
     return (
         <section className='bg-black'>
             {loading && <Loading />}
@@ -81,7 +107,7 @@ function Header() {
                     ))}
                 </div>
                 <div className='bg-[#131212] flex gap-3 rounded-full justify-center items-center pr-5 b border-white border-opacity-10 border-l-0 border-[2px] relative'>
-                    <div className='flex size-[70px] rounded-full border-[2px] bg-[#131212] border-white border-opacity-10 overflow-hidden'>
+                    <div className='flex size-14 md:size-[70px] rounded-full border-[2px] bg-[#131212] border-white border-opacity-10 overflow-hidden'>
                         <img src={manSvg} alt="" />
                     </div>
                     <div>
@@ -91,14 +117,16 @@ function Header() {
                     <button onClick={handleMenu} className={`duration-300  transition-all  ${menu ? "-rotate-180" : ""} `}>
                         <img src={dropwown} alt="" />
                     </button>
-                    <div className={` ${menu ? "block" : "hidden"} absolute -bottom-16 border-[2px] bg-[#131212] border-white border-opacity-10 py-4 px-5 right-0 flex  rounded-[50px] items-center gap-2`} >
-                        {/* <h3 className='text-white text-xs'>{user ? user.firstName : "Guest"}</h3>
-
-                        <h3 className='text-white text-xs'>{user ? user.emailId : "Guest"}</h3> */}
-
-                        <img src={logoutSvg} alt="" />
-                        <h3 className=' font-rubik text-white text-sm cursor-pointer' onClick={handleLogout}>Logout</h3>
-
+                    <div className={` ${menu ? "block" : "hidden"} absolute top-20  right-0 space-y-2`} >
+                        {menuItems.map((item, idx) => (
+                            <div onClick={() => {
+                                item.action();
+                                handleMenu();
+                            }} className={` ${item.id !== 4 ? "lg:hidden" : ""} border-[2px] bg-[#131212] border-white border-opacity-10 py-3 md:py-4 px-5 flex  rounded-[50px] items-center gap-2 justify-center`}>
+                                <img src={item.icon} alt="" className='size-5 md:size-auto' />
+                                <h3 className=' font-rubik text-white text-xs md:text-sm cursor-pointer' >{item.label}</h3>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </nav>

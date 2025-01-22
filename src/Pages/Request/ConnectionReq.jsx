@@ -61,7 +61,7 @@ function ConnectionReq() {
                 <div className='flex flex-col gap-10 items-center'>
                     {pendingRequest.map((item, idex) => (
                         <div className='bg-[#141414] p-6 rounded-[60px] border-[4px] border-white border-opacity-20 max-w-4xl  flex flex-col  md:flex-row gap-11 relative'>
-                            {/* {loader && <Loaderforcard />} */}
+                            {loader && <Loaderforcard />}
                             <div className=' imageBox rounded-[40px] border-2 border-white border-opacity-20 flex  flex-col justify-center relative bg-black pt-10 md:px-10 lg:px-20 items-center '>
                                 <div className='rounded-full size-56 flex justify-center items-center overflow-hidden'>
                                     <img src={johnImg} className='object-cover size-56' alt="" />
