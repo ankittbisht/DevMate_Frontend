@@ -4,7 +4,7 @@ import "./loader.css"
 function Loaderforcard() {
   return (
     <main className=' backdrop-blur-sm h-full w-full absolute flex justify-center items-center inset-0 z-[999]'>
-    <div className="loader ">
+      <div className="loader ">
         <div className="bar1"></div>
         <div className="bar2"></div>
         <div className="bar3"></div>
@@ -17,8 +17,8 @@ function Loaderforcard() {
         <div className="bar10"></div>
         <div className="bar11"></div>
         <div className="bar12"></div>
-    </div>
-</main>
+      </div>
+    </main>
   )
 }
 

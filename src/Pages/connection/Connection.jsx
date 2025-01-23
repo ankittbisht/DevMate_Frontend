@@ -1,7 +1,7 @@
 import axios from 'axios'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addConnection } from '../../Utils/connectionSlice'
+import { addConnection, removeConnection } from '../../Utils/connectionSlice'
 
 import maleSvg from "../../assets/svg/male.svg"
 import johnImg from "../../assets/img/john.png"
@@ -9,10 +9,12 @@ import linkedin from "../../assets/svg/linkedin.svg"
 import githubSvg from "../../assets/svg/github.svg"
 import EmptyState from '../../components/EmptyState'
 import crossIcon from "../../assets/svg/cross.svg"
+import Loaderforcard from '../../components/Loaderforcard'
 
 function Connection() {
     const arr = Array.from({ length: 5 }, (_, idx) => idx);
     const connection = useSelector((store) => store.connection)
+    const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
     const getConnections = async () => {
         try {
@@ -27,6 +29,19 @@ function Connection() {
     useEffect(() => {
         getConnections()
     }, [])
+
+
+    const handleremoveConnection = async (_id) => {
+        setLoading(true)
+        try {
+            const res = await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/request/ignored/` + _id, {}, { withCredentials: true })
+            dispatch(removeConnection(_id))
+        } catch (err) {
+            console.error(err)
+        } finally{
+            setLoading(false)
+        }
+    }
 
     // if (!connection) {
     //     return
@@ -43,7 +58,8 @@ function Connection() {
                         </h1>
                         <div className={` max-w-[950px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6`}>
                             {connection.map((item, i) => (
-                                <div className='bg-[#141414] p-6 rounded-[60px] border-4 border-white border-opacity-20 max-w-[450px] space-y-9 mx-auto'>
+                                <div className='bg-[#141414] p-6 rounded-[60px] border-4 border-white border-opacity-20 max-w-[450px] space-y-9 mx-auto relative overflow-hidden    '>
+                                    {loading && <Loaderforcard/>}
                                     <div className='imageBox rounded-[40px] border-2 border-white border-opacity-20 flex  flex-col justify-center relative bg-black pt-10 items-center '>
                                         <div className='rounded-full size-56 flex justify-center items-center overflow-hidden'>
                                             <img src={johnImg} className='object-cover size-56' alt="" />
@@ -54,9 +70,9 @@ function Connection() {
                                             </h2>
 
                                         </div>
-                                        <div className='absolute top-6 left-6'>
+                                        <button onClick={() => handleremoveConnection(item._id)} className='absolute top-6 left-6'>
                                             <img src={crossIcon} alt="" />
-                                        </div>
+                                        </button>
                                         <div className='absolute top-6 right-6'>
                                             <img src={maleSvg} alt="" />
                                         </div>
